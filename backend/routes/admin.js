@@ -34,11 +34,11 @@ module.exports = function(diskRentalContract, accounts) {
   // View pending rentals
   router.get("/pending", async (req, res) => {
     try {
-      const rentals = await diskRentalContract.getRentals();
-      const pending = rentals
+    const rentals = await diskRentalContract.getRentals();
+    const pending = rentals
         .map((r, i) => ({ rentalIndex: i, ...r }))
         .filter(r => !r.approved);
-      res.json(pending);
+    res.json(pending);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
