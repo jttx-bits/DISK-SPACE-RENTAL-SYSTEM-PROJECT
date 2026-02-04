@@ -1,53 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <title>Disk Rental System</title>
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    h2 { margin-top: 30px; }
-    input, select, button { margin: 5px 0; }
-    .section { border: 1px solid #ccc; padding: 10px; margin-bottom: 20px; }
-    .rental { margin-bottom: 5px; }
-  </style>
+  <title>User Dashboard</title>
 </head>
 <body>
+  <h1>User Dashboard</h1>
 
-<h1>Disk Rental System</h1>
+  <h2>My Rentals</h2>
+  <button id="loadRentals">View Rentals</button>
+  <ul id="rentalsList"></ul>
 
-<div class="section" id="user-section">
-  <h2>User</h2>
+  <h2>Available Plans</h2>
+  <button id="loadPlans">View Plans</button>
+  <ul id="plansList"></ul>
 
-  <label>User Index:</label>
-  <input type="number" id="userIndex" value="1"><br>
+  <h2>Request Space</h2>
+  <input type="number" id="requestSpaceMB" placeholder="Space MB" />
+  <button id="requestBtn">Request</button>
 
-  <label>Request Space (MB):</label>
-  <input type="number" id="requestSpace" value="500"><br>
-  <button onclick="requestSpace()">Request Space</button><br>
+  <h2>Mark Payment</h2>
+  <input type="number" id="payRentalIndex" placeholder="Rental Index" />
+  <button id="payBtn">Pay</button>
 
-  <label>Buy Plan:</label>
-  <select id="planSelect"></select>
-  <button onclick="buyPlan()">Buy Plan</button><br>
+  <h2>Buy Plan</h2>
+  <input type="number" id="buyPlanId" placeholder="Plan ID" />
+  <button id="buyBtn">Buy Plan</button>
 
-  <button onclick="payRental()">Mark Payment</button><br>
-
-  <button onclick="loadDashboard()">Load Dashboard</button>
-  <div id="dashboard"></div>
-</div>
-
-<div class="section" id="admin-section">
-  <h2>Admin</h2>
-
-  <label>Admin Index:</label>
-  <input type="number" id="adminIndex" value="0"><br>
-
-  <button onclick="loadPending()">View Pending Rentals</button>
-  <div id="pending"></div>
-
-  <button onclick="loadAccepted()">View Accepted Rentals</button>
-  <div id="accepted"></div>
-</div>
-
-<script src="script.js"></script>
+  <script src="user.js"></script>
 </body>
 </html>

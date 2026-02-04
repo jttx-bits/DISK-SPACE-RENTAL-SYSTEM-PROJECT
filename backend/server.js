@@ -12,6 +12,7 @@ async function startServer() {
 
   app.use("/user", userRoutes);
   app.use("/admin", adminRoutes);
+  app.use(express.static("frontend"));
 
   app.listen(3000, () => console.log("Server running on http://localhost:3000"));
 }

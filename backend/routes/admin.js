@@ -20,10 +20,11 @@ module.exports = function(diskRentalContract, accounts) {
   router.post("/reject", async (req, res) => {
     try {
       const { adminIndex, rentalIndex } = req.body;
-      // Simple approach: mark approved = false (or remove rental if you want)
       const rentals = await diskRentalContract.getRentals();
       if (rentalIndex >= rentals.length) return res.status(404).json({ error: "Rental not found" });
-      rentals[rentalIndex].approved = false; // off-chain mark, or extend contract to support reject
+
+      // Off-chain reject (as before)
+      rentals[rentalIndex].approved = false;
       res.json({ message: "Rental rejected (off-chain)" });
     } catch (err) {
       console.error(err);
@@ -34,11 +35,20 @@ module.exports = function(diskRentalContract, accounts) {
   // View pending rentals
   router.get("/pending", async (req, res) => {
     try {
-    const rentals = await diskRentalContract.getRentals();
-    const pending = rentals
-        .map((r, i) => ({ rentalIndex: i, ...r }))
+      const rentals = await diskRentalContract.getRentals();
+
+      // Fix BigInt serialization
+      const pending = rentals
+        .map((r, i) => ({
+          rentalIndex: i,
+          user: r.user,
+          spaceMB: r.spaceMB.toString(),
+          paid: r.paid.toString(),
+          approved: r.approved
+        }))
         .filter(r => !r.approved);
-    res.json(pending);
+
+      res.json(pending);
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: err.message });
@@ -49,9 +59,17 @@ module.exports = function(diskRentalContract, accounts) {
   router.get("/accepted", async (req, res) => {
     try {
       const rentals = await diskRentalContract.getRentals();
+
       const accepted = rentals
-        .map((r, i) => ({ rentalIndex: i, ...r }))
+        .map((r, i) => ({
+          rentalIndex: i,
+          user: r.user,
+          spaceMB: r.spaceMB.toString(),
+          paid: r.paid.toString(),
+          approved: r.approved
+        }))
         .filter(r => r.approved);
+
       res.json(accepted);
     } catch (err) {
       console.error(err);

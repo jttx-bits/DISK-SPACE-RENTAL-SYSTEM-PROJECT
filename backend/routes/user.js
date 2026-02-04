@@ -35,20 +35,28 @@ module.exports = function(diskRentalContract, accounts) {
     try {
       const rentals = await diskRentalContract.getRentals();
 
-      // Compute dashboard stats
-      let totalUsed = 0;
-      let totalRented = 0;
+      // 🔴 FIX: convert BigInt fields
+      const cleanedRentals = rentals.map(r => ({
+        user: r.user,
+        spaceMB: r.spaceMB.toString(),
+        paid: r.paid.toString(),
+        approved: r.approved
+      }));
 
-      rentals.forEach(r => {
-        totalRented += parseInt(r.spaceMB);
-        if (r.approved) totalUsed += parseInt(r.spaceMB);
+      // Compute dashboard stats safely
+      let totalUsed = 0n;
+      let totalRented = 0n;
+
+      cleanedRentals.forEach(r => {
+        totalRented += BigInt(r.spaceMB);
+        if (r.approved) totalUsed += BigInt(r.spaceMB);
       });
 
       const dashboard = {
-        rentals,
-        totalHardDiskUsedMB: totalUsed,
-        totalSpaceRentedMB: totalRented,
-        totalUnusedSpaceMB: totalRented - totalUsed
+        rentals: cleanedRentals,
+        totalHardDiskUsedMB: totalUsed.toString(),
+        totalSpaceRentedMB: totalRented.toString(),
+        totalUnusedSpaceMB: (totalRented - totalUsed).toString()
       };
 
       res.json(dashboard);
