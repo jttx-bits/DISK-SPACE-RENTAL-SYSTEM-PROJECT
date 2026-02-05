@@ -64,7 +64,7 @@ document.getElementById("requestBtn").addEventListener("click", async () => {
 // Pay for rental
 document.getElementById("payBtn").addEventListener("click", async () => {
   const rentalIndex = parseInt(document.getElementById("payRentalIndex").value);
-  if (isNaN(rentalIndex)) return alert("Enter rental index");
+  if ((rentalIndex)<=0) return alert("Enter appropriate rental index");
 
   const res = await fetch(`${BASE}/user/pay`, {
     method: "POST",
